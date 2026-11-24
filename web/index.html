@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Rideguard · Taxi Safety Monitor</title>
+  <link rel="stylesheet" href="./styles.css?v=3">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="/"><span class="brand-mark">R</span><span>rideguard<small>TRIP SAFETY SYSTEM</small></span></a>
+      <div class="side-label">MONITORING</div>
+      <button class="nav active"><span>▦</span> Fleet overview <b class="live-dot"></b></button>
+      <div class="side-label scenario-label">DEMO SCENARIOS</div>
+      <div class="scenario-list">
+        <button data-scenario="normal">● <span>Normal journey</span></button>
+        <button data-scenario="fleet-test">✦ <span>Full fleet test</span></button>
+        <button data-scenario="gps-loss">◌ <span>GPS interruption</span></button>
+        <button data-scenario="deviation">↗ <span>Route deviation</span></button>
+        <button data-scenario="speeding">⌁ <span>Speed anomaly</span></button>
+        <button data-scenario="driver-offline">▣ <span>Driver device offline</span></button>
+        <button data-scenario="passenger-offline">▣ <span>Passenger device offline</span></button>
+        <button data-scenario="multiple">⚠ <span>Multiple anomalies</span></button>
+      </div>
+      <div class="sidebar-bottom"><span class="avatar">RG</span><span><b>Rideguard Demo</b><small>Sample city network</small></span><span class="online">●</span></div>
+    </aside>
+    <main>
+      <header class="topbar"><div><div class="eyebrow">SAFETY OPERATIONS / AGRA DEMO</div><h1>Fleet overview</h1><p class="page-hint">Choose a scenario on the left. Use Next update to inspect each step or Replay to auto-play. Select a trip for details.</p></div><div class="top-actions"><span class="system-state"><i></i> Monitoring active</span><button id="historyBtn" class="subtle-btn">◷ Trip history</button><button id="resetBtn" class="icon-button" title="Reset demo">↻</button></div></header>
+      <div id="serverNotice" class="server-notice" hidden>The dashboard needs its Python server for trip data. Double-click <b>run_rideguard.bat</b> in the project folder, then open <b>http://127.0.0.1:8000</b>.</div>
+      <section class="metric-grid" id="metrics"></section>
+      <section class="status-breakdown" id="statusBreakdown" aria-label="Trip counts by safety status"></section>
+      <div class="severity-key" aria-label="Alert severity key"><span><i class="key-green"></i>Normal</span><span><i class="key-yellow"></i>Temporary interruption</span><span><i class="key-orange"></i>Route or speed anomaly</span><span><i class="key-red"></i>Multiple anomalies</span></div>
+      <section class="content-grid">
+        <div class="panel fleet-panel"><div class="panel-head"><div><h2>Active trips</h2><p>Live status across the monitored fleet</p></div><span class="pill"><i></i> SIMULATED</span></div>
+          <div class="table-wrap"><table><thead><tr><th>TRIP / TAXI</th><th>STATUS</th><th>LAST KNOWN</th><th>SPEED</th><th>DEVICES</th><th></th></tr></thead><tbody id="tripRows"></tbody></table></div>
+          <div class="panel-foot"><span id="tripCount">4 active journeys</span><span>Updates enter through the event queue</span></div>
+        </div>
+        <div class="panel map-panel"><div class="panel-head"><div><h2>Journey map</h2><p id="mapSubtitle">Select a trip to inspect its route</p></div><button id="zoomBtn" class="subtle-btn">⌖ Fit</button></div>
+          <div class="map-wrap"><svg id="map" viewBox="0 0 620 430" role="img" aria-label="Planned route and taxi position"></svg><div class="map-legend"><span><i class="legend-road"></i>Road network</span><span><i class="legend-route"></i>Expected route</span><span><i class="legend-actual"></i>Actual trace</span><span><i class="legend-taxi"></i>Taxi position</span><span><i class="legend-safe">+</i>Safe point</span></div><div class="map-note">Your planned route · surrounding roads and safe places are samples</div></div>
+        </div>
+      </section>
+      <section class="lower-grid">
+        <div class="panel detail-panel"><div class="panel-head"><div><h2>Selected trip</h2><p id="detailSubtitle">Choose a trip above</p></div><div class="detail-actions"><span id="detailBadge" class="status-chip normal">NORMAL</span><button id="finishBtn" class="subtle-btn">Finish trip</button></div></div><div id="tripDetail" class="trip-detail"></div></div>
+        <div class="panel timeline-panel"><div class="panel-head"><div><h2>Risk timeline</h2><p>Most recent trip events, in time order</p></div><div class="detail-actions"><button id="stepBtn" class="subtle-btn">⏭ Next update</button><button id="replayBtn" class="subtle-btn">▶ Replay</button></div></div><div id="timeline" class="timeline"></div></div>
+      </section>
+      <footer><span>RIDEGUARD <b>·</b> DSA-BASED SAFETY MONITORING</span><span id="clock">Connecting…</span></footer>
+    </main>
+  </div>
+  <div id="toast" class="toast"></div>
+  <script src="./app.js?v=3"></script>
+</body>
+</html>
