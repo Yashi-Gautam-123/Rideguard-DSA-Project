@@ -133,8 +133,7 @@ class Monitor:
                 (self.graph.distance_m(point, self.graph.nodes[route_node]) for route_node in trip.route),
                 default=float("inf"),
             )
-            # A point more than 250 m from every planned route node is treated as
-            # off-route. Requiring repeated readings reduces one-point false alarms.
+            
             deviation = route_distance_m > 250
             trip.off_route_readings.append(deviation)
             if sum(trip.off_route_readings) >= 2:
@@ -211,7 +210,7 @@ class Monitor:
         self._event(trip, "Trip completed", "Trip closed by the dashboard operator.")
         record = next(row for row in self.snapshot()["trips"] if row["trip_id"] == trip_id)
         record["completed_at"] = self.clock.isoformat()
-        # Invalidate any outstanding heap entry before removing the active record.
+        
         self.deadline_versions[trip_id] += 1
         del self.trips[trip_id]
         return record
@@ -219,7 +218,6 @@ class Monitor:
     def snapshot(self) -> dict:
         trip_rows = []
         for trip in self.trips.values():
-            # A* computes a fresh route from the last known position to the goal.
             path, distance = self.graph.shortest_path(trip.last_node, trip.destination, use_astar=True)
             trip_rows.append({"trip_id": trip.trip_id, "taxi": trip.taxi, "status": trip.status, "anomalies": sorted(trip.anomalies),
                               "last_node": trip.last_node, "last_location": self.graph.nodes[trip.last_node], "last_update": trip.last_update,

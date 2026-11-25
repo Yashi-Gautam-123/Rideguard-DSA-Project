@@ -98,9 +98,7 @@ def demo_graph() -> RoadGraph:
         a, b = graph.route_points[i], graph.route_points[i + 1]
         km = graph.distance_m(graph.nodes[a], graph.nodes[b]) / 1000
         graph.add_road(a, b, max(km, 0.001))
-
-    # These junctions are illustrative connectors: the supplied CSV only describes
-    # the planned route, not the full surrounding road network.
+    
     points = [
         ("S", "Sample South Junction", 27.1698, 78.0410), ("M", "Sample Moti Bagh Junction", 27.1769, 78.0350),
         ("R", "Sample Raja Ki Mandi Junction", 27.1830, 78.0330), ("C", "Sample City Centre Junction", 27.1872, 78.0400),
